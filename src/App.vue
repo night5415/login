@@ -29,19 +29,28 @@ export default {
   },
   methods: {
     login: function(event) {
-      var data = new FormData(),
+      var formData = new FormData(),
         url = "https://test-lighthouse.abpathfinder.net/~api/login";
-      data.append("source", "pathfinder");
-      data.append("loginUserName", "support");
-      data.append("loginPassword", "P@thf!nd3r");
-      data.append("timeZone", "America/Chicago");
 
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
-      xhr.onload = function(x, y, z) {
-        var json = JSON.parse({});
-      };
-      xhr.send(data);
+      formData.append("source", "pathfinder");
+      formData.append("loginUserName", "support");
+      formData.append("loginPassword", "P@thf!nd3r");
+      formData.append("timeZone", "America/Chicago");
+
+      fetch(url, {
+        method: "POST",
+        body: formData
+      })
+        .then(function(response) {
+          return response.text();
+        })
+        .then(function(response) {
+          //bad JSON
+          var obj = eval(`(${response})`);
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     }
   }
 };
